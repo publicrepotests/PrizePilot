@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrizePilot Sign In</title>
+    <meta
+      name="description"
+      content="Sign in to the PrizePilot organizer demo."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="auth-body">
+    <div class="auth-shell">
+      <section class="auth-panel auth-panel--intro" data-reveal>
+        <div class="brand-mark">
+          <span class="brand-mark__badge"></span>
+          <span>PrizePilot</span>
+        </div>
+        <p class="eyebrow">Organizer access</p>
+        <h1>Launch better giveaways without looking sketchy.</h1>
+        <p>
+          This demo stores organizer info, billing, and campaigns locally so you can
+          move through a realistic SaaS flow right in the browser.
+        </p>
+        <ul class="hero__proof">
+          <li>Saved organizer profile</li>
+          <li>Persistent campaign drafts</li>
+          <li>Billing and plan selection</li>
+        </ul>
+      </section>
+
+      <section class="auth-panel" data-reveal>
+        <form class="auth-form" id="auth-form">
+          <p class="dashboard-card__label">Sign in to demo</p>
+          <h2>Set up your organizer workspace.</h2>
+
+          <label class="studio-field">
+            <span>Your name</span>
+            <input id="auth-name" type="text" value="Shane" required />
+          </label>
+
+          <label class="studio-field">
+            <span>Business name</span>
+            <input id="auth-business" type="text" value="Windy City Detail Co." required />
+          </label>
+
+          <label class="studio-field">
+            <span>Email</span>
+            <input id="auth-email" type="email" value="owner@windycitydetail.co" required />
+          </label>
+
+          <button class="button" type="submit">Enter dashboard</button>
+          <a class="button button--ghost" href="index.html">Back to site</a>
+        </form>
+      </section>
+    </div>
+
+    <script src="app-state.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

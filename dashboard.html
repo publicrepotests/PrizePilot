@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrizePilot Dashboard</title>
+    <meta
+      name="description"
+      content="A dashboard prototype for PrizePilot organizers managing giveaways, contests, and referral campaigns."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="app-body">
+    <div class="app-shell">
+      <aside class="app-sidebar" data-reveal>
+        <div class="brand-mark">
+          <span class="brand-mark__badge"></span>
+          <span>PrizePilot</span>
+        </div>
+        <p class="app-sidebar__copy">
+          Clean campaigns for detailers, gyms, boutiques, creators, and local brands.
+        </p>
+        <nav class="app-nav">
+          <a class="is-current" href="dashboard.html">Overview</a>
+          <a href="studio.html">Campaign studio</a>
+          <a href="billing.html">Billing</a>
+          <a href="index.html#templates">Templates</a>
+          <a href="index.html">Marketing site</a>
+        </nav>
+        <div class="app-sidebar__card">
+          <p class="dashboard-card__label">Current plan</p>
+          <h3 id="sidebar-plan-name">Pro</h3>
+          <p id="sidebar-plan-copy">Unlimited campaigns, branding controls, and judging dashboard access.</p>
+        </div>
+      </aside>
+
+      <main class="app-main">
+        <header class="app-topbar" data-reveal>
+          <div>
+            <p class="eyebrow">Organizer dashboard</p>
+            <h1>Good campaigns should feel easy to run.</h1>
+            <p class="app-welcome" id="dashboard-welcome"></p>
+          </div>
+          <div class="app-topbar__actions">
+            <a class="button button--ghost" href="index.html">Back to site</a>
+            <a class="button" href="studio.html">New campaign</a>
+            <button class="button button--ghost" type="button" id="sign-out-button">Sign out</button>
+          </div>
+        </header>
+
+        <section class="app-hero-grid">
+          <article class="app-panel app-panel--feature" data-reveal>
+            <div class="app-panel__row">
+              <span class="pill pill--warm">Live this week</span>
+              <span class="muted">7 day trend: +18%</span>
+            </div>
+            <h2>Win a free full detail</h2>
+            <p>
+              The launch is collecting qualified local leads, blocking duplicate
+              entries, and driving more shares than the last campaign.
+            </p>
+            <div class="dashboard-stats dashboard-stats--app">
+              <article>
+                <span class="dashboard-card__label">Valid entries</span>
+                <strong>1,248</strong>
+              </article>
+              <article>
+                <span class="dashboard-card__label">Share clicks</span>
+                <strong>514</strong>
+              </article>
+              <article>
+                <span class="dashboard-card__label">Blocked duplicates</span>
+                <strong>37</strong>
+              </article>
+            </div>
+          </article>
+
+          <article class="app-panel app-panel--stack" data-reveal>
+            <p class="dashboard-card__label">Tasks to close out</p>
+            <div class="task-list">
+              <div>
+                <strong>Review 12 suspicious referrals</strong>
+                <p>Most were shared from the same IP block in under two minutes.</p>
+              </div>
+              <div>
+                <strong>Schedule the winner announcement</strong>
+                <p>Publish on May 31 at 2:00 PM with public rules linked below.</p>
+              </div>
+              <div>
+                <strong>Export email leads</strong>
+                <p>Send the campaign leads into your CRM or newsletter stack.</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="app-section">
+          <div class="app-section__heading" data-reveal>
+            <h2>Campaigns</h2>
+            <div class="segmented-controls">
+              <button class="toggle-button is-active" type="button" data-dashboard-filter="all">
+                All
+              </button>
+              <button class="toggle-button" type="button" data-dashboard-filter="giveaway">
+                Giveaways
+              </button>
+              <button class="toggle-button" type="button" data-dashboard-filter="contest">
+                Contests
+              </button>
+              <button class="toggle-button" type="button" data-dashboard-filter="referral">
+                Referral
+              </button>
+            </div>
+          </div>
+
+          <div class="campaign-list" id="campaign-list"></div>
+        </section>
+
+        <section class="app-section app-grid-2">
+          <article class="app-panel" data-reveal>
+            <div class="app-section__heading">
+              <h2>Compliance snapshots</h2>
+            </div>
+            <div class="mini-grid">
+              <div class="mini-card">
+                <span class="dashboard-card__label">No purchase campaigns</span>
+                <strong>8</strong>
+              </div>
+              <div class="mini-card">
+                <span class="dashboard-card__label">Official rules pages</span>
+                <strong>12</strong>
+              </div>
+              <div class="mini-card">
+                <span class="dashboard-card__label">Winner pages published</span>
+                <strong>6</strong>
+              </div>
+              <div class="mini-card">
+                <span class="dashboard-card__label">Fraud checks flagged</span>
+                <strong>51</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="app-panel" data-reveal>
+            <div class="app-section__heading">
+              <h2>Top templates</h2>
+            </div>
+            <div class="template-list">
+              <div>
+                <strong>Grand opening giveaway</strong>
+                <p>Best for restaurants, boutiques, salons</p>
+              </div>
+              <div>
+                <strong>Best photo contest</strong>
+                <p>Best for creators and photographers</p>
+              </div>
+              <div>
+                <strong>Refer 5, unlock reward</strong>
+                <p>Best for gyms and local membership businesses</p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="app-state.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+.next
+node_modules
+.cache
+.config
+.codex
+.env
+.env.local
+.env.*.local
+prisma/dev.db
+prisma/dev.db-journal
+data
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

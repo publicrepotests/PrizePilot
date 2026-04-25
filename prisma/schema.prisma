@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Organizer {
+  id            String  @id
+  loggedIn      Boolean @default(false)
+  organizerName String  @default("")
+  businessName  String  @default("")
+  email         String  @default("")
+}
+
+model Billing {
+  id          String @id
+  plan        String @default("starter")
+  status      String @default("trialing")
+  renewalDate String @default("2026-06-01")
+}
+
+model Campaign {
+  id         String @id
+  type       String
+  title      String
+  prize      String
+  audience   String
+  method     String
+  status     String
+  entries    Int    @default(0)
+  shareRate  String @default("0%")
+  duplicates Int    @default(0)
+  endsOn     String
+}

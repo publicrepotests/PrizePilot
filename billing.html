@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrizePilot Billing</title>
+    <meta
+      name="description"
+      content="Manage PrizePilot plans and organizer billing."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="app-body">
+    <div class="app-shell">
+      <aside class="app-sidebar" data-reveal>
+        <div class="brand-mark">
+          <span class="brand-mark__badge"></span>
+          <span>PrizePilot</span>
+        </div>
+        <p class="app-sidebar__copy">
+          Manage your plan, branded features, and launch add-ons.
+        </p>
+        <nav class="app-nav">
+          <a href="dashboard.html">Overview</a>
+          <a href="studio.html">Campaign studio</a>
+          <a class="is-current" href="billing.html">Billing</a>
+          <a href="index.html#templates">Templates</a>
+          <a href="index.html">Marketing site</a>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <header class="app-topbar" data-reveal>
+          <div>
+            <p class="eyebrow">Billing</p>
+            <h1>Choose the plan that fits how often you launch.</h1>
+          </div>
+          <div class="app-topbar__actions">
+            <a class="button button--ghost" href="dashboard.html">Back to dashboard</a>
+          </div>
+        </header>
+
+        <section class="app-panel" data-reveal>
+          <div class="app-section__heading">
+            <h2>Current subscription</h2>
+            <span class="status-pill" id="billing-status">Active</span>
+          </div>
+          <div class="billing-summary">
+            <div class="mini-card">
+              <span class="dashboard-card__label">Current plan</span>
+              <strong id="current-plan-name">Starter</strong>
+            </div>
+            <div class="mini-card">
+              <span class="dashboard-card__label">Renewal</span>
+              <strong id="current-renewal">June 1, 2026</strong>
+            </div>
+            <div class="mini-card">
+              <span class="dashboard-card__label">Billing contact</span>
+              <strong id="billing-contact">owner@windycitydetail.co</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="pricing-grid pricing-grid--app">
+          <article class="price-card" data-reveal>
+            <p class="dashboard-card__label">Starter</p>
+            <h3>$19<span>/mo</span></h3>
+            <p>3 campaigns, 500 entries, and email confirmations.</p>
+            <button class="button plan-button" type="button" data-plan="starter">
+              Choose Starter
+            </button>
+          </article>
+          <article class="price-card price-card--featured" data-reveal>
+            <p class="dashboard-card__label">Pro</p>
+            <h3>$49<span>/mo</span></h3>
+            <p>Unlimited campaigns, branding, and judging dashboard access.</p>
+            <button class="button plan-button" type="button" data-plan="pro">
+              Choose Pro
+            </button>
+          </article>
+          <article class="price-card" data-reveal>
+            <p class="dashboard-card__label">Business</p>
+            <h3>$99<span>/mo</span></h3>
+            <p>Team access, exports, and advanced analytics.</p>
+            <button class="button plan-button" type="button" data-plan="business">
+              Choose Business
+            </button>
+          </article>
+        </section>
+
+        <section class="app-panel" data-reveal>
+          <div class="app-section__heading">
+            <h2>Checkout simulation</h2>
+          </div>
+          <div class="billing-checkout" id="billing-checkout">
+            Pick a plan above to simulate a Stripe checkout confirmation.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app-state.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
