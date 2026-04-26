@@ -15,6 +15,20 @@ App URL:
 http://localhost:3000
 ```
 
+## Environment variables
+
+```txt
+DATABASE_URL=file:./prisma/dev.db
+POSTGRES_URL=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+SESSION_TTL_DAYS=14
+RESET_TOKEN_TTL_MINUTES=30
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=
+```
+
 ## Cheapest deployment path
 
 Recommended stack:
@@ -49,8 +63,24 @@ Official Vercel references:
 - [Next.js on Vercel](https://vercel.com/docs/frameworks/nextjs)
 - [Environment Variables](https://vercel.com/docs/environment-variables)
 
-For a step-by-step launch flow tailored to this repo, use [DEPLOYMENT.md](/mnt/c/Users/shane/Documents/Codex/2026-04-24/i-want-to-make-a-cool/DEPLOYMENT.md).
+For a step-by-step launch flow tailored to this repo, use [DEPLOYMENT.md](/mnt/c/Users/shane/Documents/Codex/2026-04-24/PrizePilot/DEPLOYMENT.md).
 
-## What I recommend next
+## Current production readiness
 
-If you want the app genuinely deployable on a free cloud stack, the next setup step is creating a free hosted Postgres database and dropping its connection string into `POSTGRES_URL`.
+Current state includes:
+
+1. Username/password auth with hashed passwords.
+2. Session cookies with TTL, httpOnly flags, and user-isolated dashboard data.
+3. Rate-limited auth and checkout endpoints.
+4. Baseline security headers via middleware.
+5. Token-based password reset flow with expiring reset links.
+6. Stripe webhook endpoint for billing sync at `/api/stripe/webhook`.
+7. Webhook idempotency tracking to prevent duplicate Stripe event processing.
+8. Readiness endpoint at `/api/health/ready`.
+
+Before paid launch, still complete:
+
+1. Stripe webhook fulfillment and subscription lifecycle handling.
+2. Observability (error tracking, metrics, uptime alerts).
+3. Legal/compliance review of rules templates and jurisdiction restrictions.
+4. Automated test coverage for auth/session/billing paths.

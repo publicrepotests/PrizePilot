@@ -27,6 +27,16 @@ export default function DashboardPage() {
   const campaigns = state.campaigns.filter(
     (campaign) => filter === "all" || campaign.type === filter
   );
+  const totalEntries = state.campaigns.reduce(
+    (sum, campaign) => sum + Number(campaign.entries || 0),
+    0
+  );
+  const totalDuplicates = state.campaigns.reduce(
+    (sum, campaign) => sum + Number(campaign.duplicates || 0),
+    0
+  );
+  const liveCampaigns = state.campaigns.filter((campaign) => campaign.status === "live").length;
+  const latestCampaign = state.campaigns[0];
 
   return (
     <div className="app-body">
@@ -87,26 +97,32 @@ export default function DashboardPage() {
           <section className="app-hero-grid">
             <article className="app-panel app-panel--feature">
               <div className="app-panel__row">
-                <span className="pill pill--warm">Live this week</span>
-                <span className="muted">7 day trend: +18%</span>
+                <span className="pill pill--warm">
+                  {liveCampaigns > 0 ? "Live this week" : "Ready to launch"}
+                </span>
+                <span className="muted">
+                  {state.campaigns.length} total campaign
+                  {state.campaigns.length === 1 ? "" : "s"}
+                </span>
               </div>
-              <h2>Win a free full detail</h2>
+              <h2>{latestCampaign ? latestCampaign.title : "Create your first campaign"}</h2>
               <p>
-                The launch is collecting qualified local leads, blocking duplicate
-                entries, and driving more shares than the last campaign.
+                {latestCampaign
+                  ? "Your dashboard only shows campaigns created by your account."
+                  : "Start in Campaign Studio to publish your first giveaway and build your private dashboard stats."}
               </p>
               <div className="dashboard-stats dashboard-stats--app">
                 <article>
                   <span className="dashboard-card__label">Valid entries</span>
-                  <strong>1,248</strong>
+                  <strong>{totalEntries}</strong>
                 </article>
                 <article>
-                  <span className="dashboard-card__label">Share clicks</span>
-                  <strong>514</strong>
+                  <span className="dashboard-card__label">Live campaigns</span>
+                  <strong>{liveCampaigns}</strong>
                 </article>
                 <article>
                   <span className="dashboard-card__label">Blocked duplicates</span>
-                  <strong>37</strong>
+                  <strong>{totalDuplicates}</strong>
                 </article>
               </div>
             </article>
@@ -115,16 +131,16 @@ export default function DashboardPage() {
               <p className="dashboard-card__label">Tasks to close out</p>
               <div className="task-list">
                 <div>
-                  <strong>Review 12 suspicious referrals</strong>
-                  <p>Most were shared from the same IP block in under two minutes.</p>
+                  <strong>Finalize official rules</strong>
+                  <p>Confirm eligibility, winner method, and prize value before launch.</p>
                 </div>
                 <div>
-                  <strong>Schedule the winner announcement</strong>
-                  <p>Publish on May 31 at 2:00 PM with public rules linked below.</p>
+                  <strong>Set campaign end date reminders</strong>
+                  <p>Queue your winner announcement message and export timeline.</p>
                 </div>
                 <div>
-                  <strong>Export email leads</strong>
-                  <p>Send the campaign leads into your CRM or newsletter stack.</p>
+                  <strong>Connect your lead workflow</strong>
+                  <p>Export entrants into your CRM or newsletter list when ready.</p>
                 </div>
               </div>
             </article>
@@ -150,34 +166,49 @@ export default function DashboardPage() {
             </div>
 
             <div className="campaign-list">
-              {campaigns.map((campaign) => (
-                <article className="campaign-row" key={campaign.id}>
+              {campaigns.length > 0 ? (
+                campaigns.map((campaign) => (
+                  <article className="campaign-row" key={campaign.id}>
+                    <div>
+                      <p className="dashboard-card__label">{campaign.type}</p>
+                      <h3>{campaign.title}</h3>
+                      <p>{campaign.audience}</p>
+                    </div>
+                    <div>
+                      <strong>{campaign.entries} entries</strong>
+                      <p>Ends {campaign.endsOn}</p>
+                    </div>
+                    <div>
+                      <strong>{campaign.shareRate} share rate</strong>
+                      <p>{campaign.duplicates} checks or duplicates</p>
+                    </div>
+                    <span
+                      className={`status-pill${
+                        campaign.status === "review"
+                          ? " status-pill--alt"
+                          : campaign.status === "closed"
+                            ? " status-pill--muted"
+                            : ""
+                      }`}
+                    >
+                      {campaign.status}
+                    </span>
+                  </article>
+                ))
+              ) : (
+                <article className="campaign-row">
                   <div>
-                    <p className="dashboard-card__label">{campaign.type}</p>
-                    <h3>{campaign.title}</h3>
-                    <p>{campaign.audience}</p>
+                    <p className="dashboard-card__label">No campaigns yet</p>
+                    <h3>Your workspace is private and empty.</h3>
+                    <p>Create a campaign in Studio and it will appear here instantly.</p>
                   </div>
                   <div>
-                    <strong>{campaign.entries} entries</strong>
-                    <p>Ends {campaign.endsOn}</p>
+                    <Link className="button" href="/studio">
+                      Create campaign
+                    </Link>
                   </div>
-                  <div>
-                    <strong>{campaign.shareRate} share rate</strong>
-                    <p>{campaign.duplicates} checks or duplicates</p>
-                  </div>
-                  <span
-                    className={`status-pill${
-                      campaign.status === "review"
-                        ? " status-pill--alt"
-                        : campaign.status === "closed"
-                          ? " status-pill--muted"
-                          : ""
-                    }`}
-                  >
-                    {campaign.status}
-                  </span>
                 </article>
-              ))}
+              )}
             </div>
           </section>
         </main>

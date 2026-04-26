@@ -35,7 +35,22 @@ git push -u origin main
    - `POSTGRES_URL` = your Neon connection string
    - `NEXT_PUBLIC_APP_URL` = your production URL (for example `https://prizepilot.app`)
    - `STRIPE_SECRET_KEY` = your Stripe secret key
+   - `STRIPE_WEBHOOK_SECRET` = webhook signing secret from Stripe
+   - `SESSION_TTL_DAYS` = recommended `14`
+   - `RESET_TOKEN_TTL_MINUTES` = recommended `30`
+   - `RESEND_API_KEY` and `RESEND_FROM_EMAIL` for password reset emails
 5. Deploy.
+
+## Stripe webhook setup
+
+1. In Stripe Dashboard, create a webhook endpoint:
+   - URL: `https://<your-domain>/api/stripe/webhook`
+2. Subscribe to:
+   - `checkout.session.completed`
+   - `customer.subscription.updated`
+   - `customer.subscription.deleted`
+   - `invoice.payment_failed`
+3. Copy signing secret into `STRIPE_WEBHOOK_SECRET`.
 
 ## 5. Verify after first deploy
 
@@ -44,6 +59,7 @@ git push -u origin main
 3. Create a campaign in `/studio`
 4. Confirm campaign appears on `/dashboard`
 5. Open `/billing` and test checkout path behavior
+6. Check `/api/health/ready` returns `ok: true` when required env is configured
 
 ## 6. Add custom domain (`.app`)
 
@@ -55,8 +71,17 @@ git push -u origin main
 
 ## 7. Recommended hardening after launch
 
-1. Move from demo single-tenant data model to per-user/per-organization records.
-2. Add proper auth provider (NextAuth/Clerk/Auth0/etc).
-3. Add Stripe webhook handling for authoritative billing state.
-4. Add rate limiting and abuse protection on API routes.
-5. Add monitoring and error tracking.
+Already included in this repo:
+
+1. Multi-tenant user-scoped data (each user sees only their own campaigns).
+2. Username/password auth with hashed passwords.
+3. Session expiry (`SESSION_TTL_DAYS`) and secure cookie settings.
+4. Auth and checkout rate limiting.
+5. Baseline security headers in middleware.
+
+Still required before accepting real customer payments:
+
+1. Add Stripe webhook handling for authoritative billing state.
+2. Add monitoring and error tracking.
+3. Add automated tests and deployment health checks.
+4. Complete legal review of giveaway/contest rules by jurisdiction.

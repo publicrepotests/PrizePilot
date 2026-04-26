@@ -146,6 +146,15 @@ export default function HomePage() {
           </div>
         </section>
       </main>
+      <footer className="section">
+        <div className="section-heading">
+          <p className="eyebrow">Legal</p>
+          <h2>PrizePilot policies</h2>
+        </div>
+        <p>
+          <Link href="/privacy">Privacy Policy</Link> · <Link href="/terms">Terms of Service</Link>
+        </p>
+      </footer>
     </div>
   );
 }
