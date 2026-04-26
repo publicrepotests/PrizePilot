@@ -1,11 +1,10 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePrizePilotStore } from "lib/usePrizePilotStore";
 
 export default function AuthPage() {
-  const searchParams = useSearchParams();
   const router = useRouter();
   const { state, hydrated, confirmPasswordReset, register, requestPasswordReset, signIn } =
     usePrizePilotStore();
@@ -24,8 +23,12 @@ export default function AuthPage() {
   });
 
   useEffect(() => {
-    const urlMode = searchParams.get("mode");
-    const token = searchParams.get("token");
+    if (typeof window === "undefined") {
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    const urlMode = params.get("mode");
+    const token = params.get("token");
     if (urlMode === "reset" && token) {
       setMode("reset_token");
       setForm((current) => ({
@@ -33,7 +36,7 @@ export default function AuthPage() {
         token,
       }));
     }
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     if (hydrated && state.session.loggedIn) {
