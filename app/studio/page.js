@@ -36,18 +36,44 @@ const presets = {
   },
 };
 
+function getDefaultEndDate() {
+  const date = new Date();
+  date.setDate(date.getDate() + 14);
+  return date.toISOString().slice(0, 10);
+}
+
+function formatCampaignEnd(date, time) {
+  if (!date) {
+    return "TBD";
+  }
+
+  const safeTime = time || "23:59";
+  const dt = new Date(`${date}T${safeTime}`);
+  if (Number.isNaN(dt.getTime())) {
+    return date;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(dt);
+}
+
 export default function StudioPage() {
   const router = useRouter();
   const { state, hydrated, saveCampaign } = usePrizePilotStore();
   const [view, setView] = useState("rules");
   const [message, setMessage] = useState("");
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
+  const [isSavingLive, setIsSavingLive] = useState(false);
   const [form, setForm] = useState({
     type: "giveaway",
     title: presets.giveaway.title,
     prize: presets.giveaway.prize,
     audience: presets.giveaway.audience,
     method: presets.giveaway.method,
-    endDate: "May 31, 2026",
+    endDate: getDefaultEndDate(),
+    endTime: "17:00",
   });
 
   useEffect(() => {
@@ -162,9 +188,20 @@ export default function StudioPage() {
                 <label className="studio-field">
                   <span>End date</span>
                   <input
+                    type="date"
                     value={form.endDate}
                     onChange={(event) =>
                       setForm((current) => ({ ...current, endDate: event.target.value }))
+                    }
+                  />
+                </label>
+                <label className="studio-field">
+                  <span>End time</span>
+                  <input
+                    type="time"
+                    value={form.endTime}
+                    onChange={(event) =>
+                      setForm((current) => ({ ...current, endTime: event.target.value }))
                     }
                   />
                 </label>
@@ -181,20 +218,56 @@ export default function StudioPage() {
                 <button
                   className="button"
                   type="button"
+                  disabled={isSavingDraft || isSavingLive}
                   onClick={async () => {
-                    await saveCampaign({
-                      title: form.title,
-                      prize: form.prize,
-                      audience: form.audience,
-                      method: form.method,
-                      type: form.type,
-                      endsOn: form.endDate,
-                      status: "draft",
-                    });
-                    setMessage(`${form.title} was saved to your dashboard.`);
+                    setIsSavingDraft(true);
+                    setMessage("");
+                    try {
+                      await saveCampaign({
+                        title: form.title,
+                        prize: form.prize,
+                        audience: form.audience,
+                        method: form.method,
+                        type: form.type,
+                        endsOn: formatCampaignEnd(form.endDate, form.endTime),
+                        status: "draft",
+                      });
+                      setMessage(`${form.title} saved as draft.`);
+                    } catch (error) {
+                      setMessage(error.message || "Unable to save draft right now.");
+                    } finally {
+                      setIsSavingDraft(false);
+                    }
                   }}
                 >
-                  Save campaign
+                  {isSavingDraft ? "Saving..." : "Save draft"}
+                </button>
+                <button
+                  className="button button--secondary"
+                  type="button"
+                  disabled={isSavingDraft || isSavingLive}
+                  onClick={async () => {
+                    setIsSavingLive(true);
+                    setMessage("");
+                    try {
+                      await saveCampaign({
+                        title: form.title,
+                        prize: form.prize,
+                        audience: form.audience,
+                        method: form.method,
+                        type: form.type,
+                        endsOn: formatCampaignEnd(form.endDate, form.endTime),
+                        status: "live",
+                      });
+                      setMessage(`${form.title} is now live on your dashboard.`);
+                    } catch (error) {
+                      setMessage(error.message || "Unable to launch campaign right now.");
+                    } finally {
+                      setIsSavingLive(false);
+                    }
+                  }}
+                >
+                  {isSavingLive ? "Launching..." : "Save & launch"}
                 </button>
                 <Link className="button button--ghost" href="/dashboard">
                   View dashboard
@@ -229,6 +302,7 @@ export default function StudioPage() {
                     <li>Prize: {form.prize}.</li>
                     <li>Eligibility: {form.audience}.</li>
                     <li>Winner method: {form.method}.</li>
+                    <li>Campaign closes: {formatCampaignEnd(form.endDate, form.endTime)}.</li>
                   </ul>
                 </div>
               ) : null}

@@ -126,6 +126,13 @@ select {
   border: 1px solid rgba(24, 35, 53, 0.12);
 }
 
+.button--mini {
+  min-height: 2rem;
+  padding: 0.35rem 0.68rem;
+  font-size: 0.82rem;
+  line-height: 1.15;
+}
+
 .hero,
 .feature-grid,
 .pricing-grid,
@@ -136,7 +143,8 @@ select {
 .studio-field-grid,
 .auth-shell,
 .billing-summary,
-.dashboard-stats {
+.dashboard-stats,
+.analytics-grid {
   display: grid;
   gap: 1rem;
 }
@@ -245,12 +253,69 @@ select {
 .dashboard-card__topline,
 .dashboard-card__hero,
 .app-panel__row,
-.app-section__heading,
-.campaign-row {
+.app-section__heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.campaign-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.campaign-card {
+  display: grid;
+  gap: 0.65rem;
+  align-content: start;
+  border: 1px solid rgba(24, 35, 53, 0.09);
+  background: var(--surface);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+}
+
+.campaign-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.campaign-card__header h3 {
+  font-size: 2rem;
+}
+
+.campaign-card__audience {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.campaign-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.campaign-card__stats .dashboard-card__label {
+  margin-bottom: 0.3rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+}
+
+.campaign-card__stats strong {
+  font-size: 1rem;
+}
+
+.campaign-card__deadline {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-soft);
 }
 
 .dashboard-card__hero h2,
@@ -287,8 +352,40 @@ select {
 .feature-grid,
 .pricing-grid--app,
 .campaign-list,
-.billing-summary {
+.billing-summary,
+.analytics-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.analytics-grid--compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metric-value {
+  display: block;
+  font-size: 1.65rem;
+  line-height: 1.2;
+  margin: 0.2rem 0 0.45rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: rgba(24, 35, 53, 0.12);
+  overflow: hidden;
+  margin: 0.35rem 0 0.5rem;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #159c90, #2ccab8);
+}
+
+.progress-fill--warn {
+  background: linear-gradient(90deg, #f06a43, #f1b74c);
 }
 
 .feature-card__icon {
@@ -497,5 +594,9 @@ select {
 
   .hero__copy h1 {
     font-size: clamp(3rem, 16vw, 4.6rem);
+  }
+
+  .campaign-card__stats {
+    grid-template-columns: 1fr;
   }
 }

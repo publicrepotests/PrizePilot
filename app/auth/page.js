@@ -109,7 +109,7 @@ export default function AuthPage() {
             <span>PrizePilot</span>
           </div>
           <p className="eyebrow">Organizer access</p>
-          <h1>Launch better giveaways without looking sketchy.</h1>
+          <h1>Launch premium campaigns with professional controls.</h1>
           <p>
             Create your own PrizePilot account and keep your campaigns isolated
             to your workspace only.

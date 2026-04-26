@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { usePrizePilotStore } from "lib/usePrizePilotStore";
 
-const filters = ["all", "giveaway", "contest", "referral"];
+const filters = ["all", "giveaway", "contest", "referral", "loyalty"];
 
 const planCopy = {
   starter: "Great for local shops running a few campaigns each month.",
@@ -15,8 +15,17 @@ const planCopy = {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { state, hydrated, signOut } = usePrizePilotStore();
+  const { state, hydrated, signOut, updateCampaignStatus } = usePrizePilotStore();
   const [filter, setFilter] = useState("all");
+  const [updatingId, setUpdatingId] = useState("");
+  const [flashMessage, setFlashMessage] = useState("");
+
+  function getShareUrl(campaignId) {
+    if (typeof window !== "undefined") {
+      return `${window.location.origin}/c/${campaignId}`;
+    }
+    return `/c/${campaignId}`;
+  }
 
   useEffect(() => {
     if (hydrated && !state.session.loggedIn) {
@@ -36,6 +45,21 @@ export default function DashboardPage() {
     0
   );
   const liveCampaigns = state.campaigns.filter((campaign) => campaign.status === "live").length;
+  const draftCampaigns = state.campaigns.filter((campaign) => campaign.status === "draft").length;
+  const closedCampaigns = state.campaigns.filter((campaign) => campaign.status === "closed").length;
+  const acceptedEntries = Math.max(0, totalEntries - totalDuplicates);
+  const avgEntriesPerCampaign = state.campaigns.length
+    ? Math.round(totalEntries / state.campaigns.length)
+    : 0;
+  const launchReadiness = state.campaigns.length
+    ? Math.round(((state.campaigns.length - draftCampaigns) / state.campaigns.length) * 100)
+    : 0;
+  const duplicateRate = totalEntries
+    ? Math.min(100, Math.round((totalDuplicates / totalEntries) * 100))
+    : 0;
+  const topCampaign = [...state.campaigns].sort(
+    (a, b) => Number(b.entries || 0) - Number(a.entries || 0)
+  )[0];
   const latestCampaign = state.campaigns[0];
 
   return (
@@ -131,12 +155,12 @@ export default function DashboardPage() {
               <p className="dashboard-card__label">Tasks to close out</p>
               <div className="task-list">
                 <div>
-                  <strong>Finalize official rules</strong>
-                  <p>Confirm eligibility, winner method, and prize value before launch.</p>
+                  <strong>Launch draft campaigns</strong>
+                  <p>Use the Launch action below to push approved drafts live instantly.</p>
                 </div>
                 <div>
-                  <strong>Set campaign end date reminders</strong>
-                  <p>Queue your winner announcement message and export timeline.</p>
+                  <strong>Schedule winner announcements</strong>
+                  <p>Line up posting windows and share links before your campaign closes.</p>
                 </div>
                 <div>
                   <strong>Connect your lead workflow</strong>
@@ -144,6 +168,57 @@ export default function DashboardPage() {
                 </div>
               </div>
             </article>
+          </section>
+
+          <section className="app-section">
+            <div className="app-section__heading">
+              <h2>Analytics</h2>
+            </div>
+            <div className="analytics-grid">
+              <article className="mini-card">
+                <span className="dashboard-card__label">Entries accepted</span>
+                <strong className="metric-value">{acceptedEntries}</strong>
+                <p>{totalDuplicates} blocked as duplicates or abuse checks.</p>
+              </article>
+              <article className="mini-card">
+                <span className="dashboard-card__label">Average campaign volume</span>
+                <strong className="metric-value">{avgEntriesPerCampaign}</strong>
+                <p>Average entries per campaign across your workspace.</p>
+              </article>
+              <article className="mini-card">
+                <span className="dashboard-card__label">Top performer</span>
+                <strong className="metric-value">
+                  {topCampaign ? topCampaign.title : "No campaigns yet"}
+                </strong>
+                <p>{topCampaign ? `${topCampaign.entries} entries` : "Launch to unlock analytics."}</p>
+              </article>
+            </div>
+
+            <div className="analytics-grid analytics-grid--compact">
+              <article className="mini-card">
+                <span className="dashboard-card__label">Launch readiness</span>
+                <strong className="metric-value">{launchReadiness}%</strong>
+                <div className="progress-track">
+                  <span className="progress-fill" style={{ width: `${launchReadiness}%` }} />
+                </div>
+                <p>{draftCampaigns} campaigns still in draft.</p>
+              </article>
+              <article className="mini-card">
+                <span className="dashboard-card__label">Duplicate risk</span>
+                <strong className="metric-value">{duplicateRate}%</strong>
+                <div className="progress-track">
+                  <span className="progress-fill progress-fill--warn" style={{ width: `${duplicateRate}%` }} />
+                </div>
+                <p>Lower is better. Monitor suspicious spikes.</p>
+              </article>
+              <article className="mini-card">
+                <span className="dashboard-card__label">Campaign status mix</span>
+                <strong className="metric-value">
+                  {liveCampaigns} live / {draftCampaigns} draft / {closedCampaigns} closed
+                </strong>
+                <p>Balanced pipeline keeps launches consistent.</p>
+              </article>
+            </div>
           </section>
 
           <section className="app-section">
@@ -164,35 +239,174 @@ export default function DashboardPage() {
                 ))}
               </div>
             </div>
+            {flashMessage ? <p className="studio-save-message">{flashMessage}</p> : null}
 
             <div className="campaign-list">
               {campaigns.length > 0 ? (
                 campaigns.map((campaign) => (
-                  <article className="campaign-row" key={campaign.id}>
-                    <div>
-                      <p className="dashboard-card__label">{campaign.type}</p>
-                      <h3>{campaign.title}</h3>
-                      <p>{campaign.audience}</p>
+                  <article className="campaign-card" key={campaign.id}>
+                    <div className="campaign-card__header">
+                      <div>
+                        <p className="dashboard-card__label">{campaign.type}</p>
+                        <h3>{campaign.title}</h3>
+                      </div>
+                      <span
+                        className={`status-pill${
+                          campaign.status === "review"
+                            ? " status-pill--alt"
+                            : campaign.status === "closed"
+                              ? " status-pill--muted"
+                              : ""
+                        }`}
+                      >
+                        {campaign.status}
+                      </span>
                     </div>
-                    <div>
-                      <strong>{campaign.entries} entries</strong>
-                      <p>Ends {campaign.endsOn}</p>
+
+                    <p className="campaign-card__audience">{campaign.audience}</p>
+
+                    <div className="campaign-card__stats">
+                      <div>
+                        <span className="dashboard-card__label">Entries</span>
+                        <strong>{campaign.entries}</strong>
+                      </div>
+                      <div>
+                        <span className="dashboard-card__label">Share rate</span>
+                        <strong>{campaign.shareRate}</strong>
+                      </div>
+                      <div>
+                        <span className="dashboard-card__label">Checks</span>
+                        <strong>{campaign.duplicates}</strong>
+                      </div>
                     </div>
-                    <div>
-                      <strong>{campaign.shareRate} share rate</strong>
-                      <p>{campaign.duplicates} checks or duplicates</p>
+
+                    <p className="campaign-card__deadline">Ends {campaign.endsOn}</p>
+
+                    <div className="campaign-actions">
+                      <a
+                        className="button button--ghost button--mini"
+                        href={getShareUrl(campaign.id)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Open page
+                      </a>
+                      <button
+                        className="button button--ghost button--mini"
+                        type="button"
+                        onClick={async () => {
+                          const shareUrl = getShareUrl(campaign.id);
+                          try {
+                            if (navigator?.clipboard?.writeText) {
+                              await navigator.clipboard.writeText(shareUrl);
+                              setFlashMessage(`Share link copied for "${campaign.title}".`);
+                            } else {
+                              setFlashMessage(`Share link: ${shareUrl}`);
+                            }
+                          } catch {
+                            setFlashMessage(`Share link: ${shareUrl}`);
+                          }
+                        }}
+                      >
+                        Copy link
+                      </button>
+                      <button
+                        className="button button--ghost button--mini"
+                        type="button"
+                        onClick={async () => {
+                          setFlashMessage("");
+                          try {
+                            const response = await fetch(
+                              `/api/campaigns/${campaign.id}/entrants?format=csv`
+                            );
+                            if (!response.ok) {
+                              const payload = await response.json().catch(() => ({}));
+                              throw new Error(payload?.error || `Request failed: ${response.status}`);
+                            }
+                            const csv = await response.text();
+                            const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+                            const url = URL.createObjectURL(blob);
+                            const anchor = document.createElement("a");
+                            anchor.href = url;
+                            anchor.download = `${campaign.title
+                              .toLowerCase()
+                              .replace(/[^a-z0-9]+/g, "-")}-entrants.csv`;
+                            document.body.appendChild(anchor);
+                            anchor.click();
+                            document.body.removeChild(anchor);
+                            URL.revokeObjectURL(url);
+                            setFlashMessage(`Entrants exported for "${campaign.title}".`);
+                          } catch (error) {
+                            setFlashMessage(error.message || "Unable to export entrants.");
+                          }
+                        }}
+                      >
+                        Export entrants
+                      </button>
+                      {campaign.status === "draft" ? (
+                        <button
+                          className="button button--mini"
+                          type="button"
+                          disabled={updatingId === campaign.id}
+                          onClick={async () => {
+                            setUpdatingId(campaign.id);
+                            setFlashMessage("");
+                            try {
+                              await updateCampaignStatus(campaign.id, "live");
+                              setFlashMessage(`"${campaign.title}" is now live.`);
+                            } catch (error) {
+                              setFlashMessage(error.message || "Unable to launch campaign.");
+                            } finally {
+                              setUpdatingId("");
+                            }
+                          }}
+                        >
+                          {updatingId === campaign.id ? "Launching..." : "Launch"}
+                        </button>
+                      ) : null}
+                      {campaign.status === "live" ? (
+                        <button
+                          className="button button--ghost button--mini"
+                          type="button"
+                          disabled={updatingId === campaign.id}
+                          onClick={async () => {
+                            setUpdatingId(campaign.id);
+                            setFlashMessage("");
+                            try {
+                              await updateCampaignStatus(campaign.id, "closed");
+                              setFlashMessage(`"${campaign.title}" was closed.`);
+                            } catch (error) {
+                              setFlashMessage(error.message || "Unable to close campaign.");
+                            } finally {
+                              setUpdatingId("");
+                            }
+                          }}
+                        >
+                          {updatingId === campaign.id ? "Closing..." : "Close"}
+                        </button>
+                      ) : null}
+                      {campaign.status === "closed" ? (
+                        <button
+                          className="button button--ghost button--mini"
+                          type="button"
+                          disabled={updatingId === campaign.id}
+                          onClick={async () => {
+                            setUpdatingId(campaign.id);
+                            setFlashMessage("");
+                            try {
+                              await updateCampaignStatus(campaign.id, "live");
+                              setFlashMessage(`"${campaign.title}" is live again.`);
+                            } catch (error) {
+                              setFlashMessage(error.message || "Unable to relaunch campaign.");
+                            } finally {
+                              setUpdatingId("");
+                            }
+                          }}
+                        >
+                          {updatingId === campaign.id ? "Relaunching..." : "Relaunch"}
+                        </button>
+                      ) : null}
                     </div>
-                    <span
-                      className={`status-pill${
-                        campaign.status === "review"
-                          ? " status-pill--alt"
-                          : campaign.status === "closed"
-                            ? " status-pill--muted"
-                            : ""
-                      }`}
-                    >
-                      {campaign.status}
-                    </span>
                   </article>
                 ))
               ) : (

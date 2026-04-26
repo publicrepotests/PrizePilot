@@ -1,4 +1,4 @@
-import { saveCampaign, StoreError } from "lib/prizePilotStore";
+import { saveCampaign, StoreError, updateCampaignStatus } from "lib/prizePilotStore";
 import { jsonWithRequestId, makeRequestId, serverErrorResponse } from "lib/apiUtils";
 
 const SESSION_COOKIE = "prizepilot_session";
@@ -29,5 +29,27 @@ export async function POST(request) {
       });
     }
     return serverErrorResponse(error, requestId, "Unable to save campaign right now.");
+  }
+}
+
+export async function PATCH(request) {
+  const requestId = makeRequestId();
+  try {
+    const body = await request.json();
+    const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
+    const updatedCampaign = await updateCampaignStatus(
+      body.id || "",
+      body.status || "",
+      sessionCookie
+    );
+
+    return jsonWithRequestId(updatedCampaign, requestId);
+  } catch (error) {
+    if (error instanceof StoreError) {
+      return jsonWithRequestId({ error: error.message, requestId }, requestId, {
+        status: error.status,
+      });
+    }
+    return serverErrorResponse(error, requestId, "Unable to update campaign right now.");
   }
 }

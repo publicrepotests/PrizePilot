@@ -38,7 +38,7 @@ export default function HomePage() {
           <Link href="/billing">Billing</Link>
         </nav>
         <Link className="button button--ghost" href="/auth">
-          Open demo app
+          Organizer login
         </Link>
       </header>
 
@@ -46,7 +46,7 @@ export default function HomePage() {
         <section className="hero">
           <div className="hero__copy">
             <p className="eyebrow">Giveaways that look legit and feel premium</p>
-            <h1>Stop running sketchy comment giveaways.</h1>
+            <h1>Run polished campaigns your audience can trust.</h1>
             <p className="hero__lede">
               PrizePilot gives small businesses and creators a clean way to launch
               giveaways, skill contests, referral challenges, and loyalty rewards
@@ -55,10 +55,10 @@ export default function HomePage() {
             </p>
             <div className="hero__actions">
               <Link className="button" href="/studio">
-                Try the campaign builder
+                Launch your first campaign
               </Link>
               <Link className="button button--secondary" href="/auth">
-                Open demo app
+                Sign in
               </Link>
             </div>
             <ul className="hero__proof">
