@@ -23,6 +23,11 @@ POSTGRES_URL=
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+TURNSTILE_SECRET_KEY=
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+PRIZEPILOT_CRON_SECRET=
+CRON_SECRET=
+PRIZEPILOT_FREE_TEST_MODE=false
 SESSION_TTL_DAYS=14
 RESET_TOKEN_TTL_MINUTES=30
 RESEND_API_KEY=
@@ -77,6 +82,11 @@ Current state includes:
 6. Stripe webhook endpoint for billing sync at `/api/stripe/webhook`.
 7. Webhook idempotency tracking to prevent duplicate Stripe event processing.
 8. Readiness endpoint at `/api/health/ready`.
+9. Origin checks on authenticated mutation endpoints to reduce CSRF risk.
+10. Endpoint-level rate limiting on auth, checkout, campaign edits, team actions, judging, and public entries.
+11. CI workflow on GitHub Actions that runs `npm ci` + `npm run build`.
+12. Optional Turnstile CAPTCHA support for public entry submission.
+13. Scheduled campaign settle endpoint at `/api/jobs/settle-campaigns` for cron-driven auto-close.
 
 Before paid launch, still complete:
 
@@ -84,3 +94,15 @@ Before paid launch, still complete:
 2. Observability (error tracking, metrics, uptime alerts).
 3. Legal/compliance review of rules templates and jurisdiction restrictions.
 4. Automated test coverage for auth/session/billing paths.
+
+## Postgres switch checklist
+
+If you are moving from local SQLite to production Postgres:
+
+1. Keep local dev on SQLite (`DATABASE_URL=file:./prisma/dev.db`).
+2. Set `POSTGRES_URL` in production (Vercel) to your managed Postgres URL.
+3. Redeploy.
+4. Open `/api/health/ready` and confirm `backend` is `postgres`.
+5. Create a test account, create a campaign, and submit one test entry.
+
+Note: this app bootstraps/migrates required tables at startup on the selected backend.

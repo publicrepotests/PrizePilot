@@ -1,0 +1,35 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="36" fill="#F8F2E8"/>
+  <rect x="40" y="38" width="1120" height="84" rx="22" fill="#FFF9F1" stroke="#D9D1C6"/>
+  <rect x="68" y="64" width="180" height="30" rx="14" fill="#172033"/>
+  <rect x="860" y="58" width="128" height="42" rx="20" fill="#FFFFFF" stroke="#D9D1C6"/>
+  <rect x="1002" y="58" width="130" height="42" rx="20" fill="#F06A43"/>
+  <rect x="40" y="146" width="1120" height="576" rx="28" fill="#FFF9F1" stroke="#D9D1C6"/>
+  <rect x="74" y="184" width="726" height="248" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <text x="102" y="218" fill="#172033" font-size="30" font-family="Arial" font-weight="700">Campaign control center</text>
+  <rect x="104" y="220" width="264" height="24" rx="12" fill="#E8DFD2"/>
+  <rect x="104" y="256" width="510" height="24" rx="12" fill="#E8DFD2"/>
+  <rect x="104" y="292" width="420" height="24" rx="12" fill="#E8DFD2"/>
+  <rect x="104" y="340" width="168" height="48" rx="24" fill="#159C90"/>
+  <text x="148" y="371" fill="#F7F1E8" font-size="20" font-family="Arial" font-weight="700">Live</text>
+  <rect x="286" y="340" width="176" height="48" rx="24" fill="#FFFFFF" stroke="#D9D1C6"/>
+  <text x="338" y="371" fill="#324058" font-size="20" font-family="Arial" font-weight="700">Copy link</text>
+  <rect x="476" y="340" width="162" height="48" rx="24" fill="#FFFFFF" stroke="#D9D1C6"/>
+  <text x="522" y="371" fill="#324058" font-size="20" font-family="Arial" font-weight="700">QR code</text>
+  <rect x="822" y="184" width="304" height="248" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <text x="850" y="218" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">SHARE CHANNELS</text>
+  <rect x="850" y="220" width="248" height="22" rx="11" fill="#E8DFD2"/>
+  <rect x="850" y="252" width="248" height="58" rx="14" fill="#F2EBDE"/>
+  <rect x="850" y="324" width="248" height="58" rx="14" fill="#F2EBDE"/>
+  <rect x="74" y="452" width="1052" height="236" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <text x="102" y="486" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">EXPORT ENTRANTS + ASSETS</text>
+  <rect x="104" y="486" width="324" height="170" rx="20" fill="#F2EBDE"/>
+  <text x="126" y="528" fill="#172033" font-size="19" font-family="Arial" font-weight="700">CSV export</text>
+  <text x="126" y="558" fill="#324058" font-size="16" font-family="Arial">Name, email, source</text>
+  <rect x="448" y="486" width="324" height="170" rx="20" fill="#F2EBDE"/>
+  <text x="470" y="528" fill="#172033" font-size="19" font-family="Arial" font-weight="700">Printable flyer</text>
+  <text x="470" y="558" fill="#324058" font-size="16" font-family="Arial">Poster + QR code ready</text>
+  <rect x="792" y="486" width="304" height="170" rx="20" fill="#F2EBDE"/>
+  <text x="814" y="528" fill="#172033" font-size="19" font-family="Arial" font-weight="700">Campaign page</text>
+  <text x="814" y="558" fill="#324058" font-size="16" font-family="Arial">Public link active</text>
+</svg>

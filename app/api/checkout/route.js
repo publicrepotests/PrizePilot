@@ -7,15 +7,16 @@ import {
   makeRequestId,
   serverErrorResponse,
 } from "lib/apiUtils";
+import { enforceMutationOrigin } from "lib/requestSecurity";
 
 const planConfig = {
   starter: {
     label: "Starter",
-    amount: 1900,
+    amount: 0,
   },
   pro: {
     label: "Pro",
-    amount: 4900,
+    amount: 1999,
   },
   business: {
     label: "Business",
@@ -27,6 +28,13 @@ const SESSION_COOKIE = "prizepilot_session";
 export async function POST(request) {
   const requestId = makeRequestId();
   try {
+    const blockedOrigin = enforceMutationOrigin(request, requestId, {
+      message: "Checkout request blocked due to origin check.",
+    });
+    if (blockedOrigin) {
+      return blockedOrigin;
+    }
+
     const sessionToken = request.cookies.get(SESSION_COOKIE)?.value;
     const state = await getPublicState(sessionToken);
     if (!state.session.loggedIn) {
@@ -52,6 +60,29 @@ export async function POST(request) {
       ? body.plan
       : "starter";
     const plan = planConfig[selectedPlanId];
+
+    if (selectedPlanId === "business") {
+      return jsonWithRequestId(
+        {
+          error: "Business plan is temporarily unavailable while enterprise features are in progress.",
+          requestId,
+        },
+        requestId,
+        { status: 403 }
+      );
+    }
+
+    if (selectedPlanId === "starter") {
+      return jsonWithRequestId(
+        {
+          error: "Starter is a free plan and does not require checkout.",
+          requestId,
+        },
+        requestId,
+        { status: 400 }
+      );
+    }
+
     const stripe = getStripe();
 
     if (!stripe) {

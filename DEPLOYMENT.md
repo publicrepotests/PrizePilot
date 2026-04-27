@@ -36,6 +36,9 @@ git push -u origin main
    - `NEXT_PUBLIC_APP_URL` = your production URL (for example `https://prizepilot.app`)
    - `STRIPE_SECRET_KEY` = your Stripe secret key
    - `STRIPE_WEBHOOK_SECRET` = webhook signing secret from Stripe
+   - `PRIZEPILOT_FREE_TEST_MODE` = `false`
+   - `TURNSTILE_SECRET_KEY` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` for public entry CAPTCHA
+   - `CRON_SECRET` (or `PRIZEPILOT_CRON_SECRET`) for scheduled campaign settling endpoint auth
    - `SESSION_TTL_DAYS` = recommended `14`
    - `RESET_TOKEN_TTL_MINUTES` = recommended `30`
    - `RESEND_API_KEY` and `RESEND_FROM_EMAIL` for password reset emails
@@ -60,6 +63,17 @@ git push -u origin main
 4. Confirm campaign appears on `/dashboard`
 5. Open `/billing` and test checkout path behavior
 6. Check `/api/health/ready` returns `ok: true` when required env is configured
+7. Confirm `backend` in `/api/health/ready` is `postgres` in production
+8. Confirm `checks.stripeMode` is `live` and `checks.freeTestModeDisabled` is `true`
+
+## Scheduled auto-close job
+
+Use Vercel Cron (or any scheduler) to call:
+
+- `GET https://<your-domain>/api/jobs/settle-campaigns`
+- Header: `Authorization: Bearer <CRON_SECRET>`
+
+Recommended cadence: every 1-5 minutes.
 
 ## 6. Add custom domain (`.app`)
 
@@ -78,6 +92,9 @@ Already included in this repo:
 3. Session expiry (`SESSION_TTL_DAYS`) and secure cookie settings.
 4. Auth and checkout rate limiting.
 5. Baseline security headers in middleware.
+6. Origin checks for authenticated mutation endpoints.
+7. Endpoint rate limiting for campaign/team/judging/public-entry writes.
+8. CI build workflow (`.github/workflows/ci.yml`).
 
 Still required before accepting real customer payments:
 

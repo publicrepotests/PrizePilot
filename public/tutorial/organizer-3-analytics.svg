@@ -1,0 +1,35 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="36" fill="#F8F2E8"/>
+  <rect x="40" y="36" width="1120" height="86" rx="22" fill="#FFF9F1" stroke="#D9D1C6"/>
+  <rect x="68" y="63" width="178" height="30" rx="14" fill="#172033"/>
+  <rect x="40" y="146" width="1120" height="576" rx="28" fill="#FFF9F1" stroke="#D9D1C6"/>
+  <text x="74" y="166" fill="#172033" font-size="30" font-family="Arial" font-weight="700">Analytics dashboard</text>
+  <rect x="74" y="180" width="332" height="226" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <rect x="432" y="180" width="332" height="226" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <rect x="790" y="180" width="336" height="226" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <rect x="98" y="212" width="180" height="22" rx="11" fill="#E8DFD2"/>
+  <text x="98" y="246" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">Entries accepted</text>
+  <text x="98" y="292" fill="#172033" font-size="60" font-family="Arial" font-weight="700">1,248</text>
+  <rect x="98" y="250" width="260" height="104" rx="16" fill="#F2EBDE"/>
+  <rect x="456" y="212" width="180" height="22" rx="11" fill="#E8DFD2"/>
+  <text x="456" y="246" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">Duplicate risk</text>
+  <text x="456" y="292" fill="#172033" font-size="60" font-family="Arial" font-weight="700">2.9%</text>
+  <rect x="456" y="250" width="260" height="104" rx="16" fill="#F2EBDE"/>
+  <rect x="814" y="212" width="180" height="22" rx="11" fill="#E8DFD2"/>
+  <text x="814" y="246" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">Top source</text>
+  <text x="814" y="292" fill="#172033" font-size="48" font-family="Arial" font-weight="700">Instagram</text>
+  <rect x="814" y="250" width="280" height="104" rx="16" fill="#F2EBDE"/>
+  <rect x="74" y="430" width="1052" height="258" rx="24" fill="#FFFDF9" stroke="#DFD8CE"/>
+  <rect x="100" y="460" width="650" height="198" rx="18" fill="#F2EBDE"/>
+  <text x="124" y="490" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">Entries over time</text>
+  <path d="M130 620L230 560L326 592L420 520L512 542L612 488L718 532" stroke="#159C90" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="230" cy="560" r="10" fill="#F06A43"/>
+  <circle cx="420" cy="520" r="10" fill="#F06A43"/>
+  <circle cx="612" cy="488" r="10" fill="#F06A43"/>
+  <rect x="776" y="460" width="324" height="198" rx="18" fill="#F2EBDE"/>
+  <text x="804" y="490" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">Source quality</text>
+  <rect x="804" y="492" width="268" height="20" rx="10" fill="#E8DFD2"/>
+  <rect x="804" y="524" width="206" height="20" rx="10" fill="#E8DFD2"/>
+  <rect x="804" y="556" width="248" height="20" rx="10" fill="#E8DFD2"/>
+  <rect x="804" y="588" width="154" height="20" rx="10" fill="#E8DFD2"/>
+</svg>

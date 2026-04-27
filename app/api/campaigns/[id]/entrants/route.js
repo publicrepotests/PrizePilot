@@ -4,12 +4,26 @@ import { jsonWithRequestId, makeRequestId, serverErrorResponse } from "lib/apiUt
 const SESSION_COOKIE = "prizepilot_session";
 
 function toCsv(rows) {
-  const header = ["name", "email", "source", "createdAt"];
+  const header = [
+    "name",
+    "email",
+    "submissionTitle",
+    "source",
+    "createdAt",
+    "hasImage",
+    "projectLink",
+  ];
   const lines = [header.join(",")];
   rows.forEach((row) => {
-    const values = [row.name, row.email, row.source, row.createdAt].map((value) =>
-      `"${String(value || "").replace(/"/g, "\"\"")}"`
-    );
+    const values = [
+      row.name,
+      row.email,
+      row.submissionTitle,
+      row.source,
+      row.createdAt,
+      row.hasImage,
+      row.projectLink,
+    ].map((value) => `"${String(value ?? "").replace(/"/g, "\"\"")}"`);
     lines.push(values.join(","));
   });
   return lines.join("\n");

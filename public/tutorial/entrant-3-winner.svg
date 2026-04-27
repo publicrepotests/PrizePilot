@@ -1,0 +1,48 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="760" rx="36" fill="#ECE2D0"/>
+  <rect x="40" y="34" width="1120" height="688" rx="30" fill="#FFF9F1" stroke="#D8D1C6"/>
+  <rect x="74" y="70" width="472" height="616" rx="28" fill="#172033"/>
+  <text x="108" y="112" fill="#D7E0F3" font-size="16" font-family="Arial" font-weight="700">GIVEAWAY</text>
+  <text x="108" y="176" fill="#FFF9F1" font-size="58" font-family="Arial" font-weight="700">Win a free</text>
+  <text x="108" y="234" fill="#FFF9F1" font-size="58" font-family="Arial" font-weight="700">full detail</text>
+  <rect x="108" y="274" width="310" height="36" rx="18" fill="#FFFFFF"/>
+  <text x="128" y="298" fill="#324058" font-size="18" font-family="Arial" font-weight="700">Winner: Random draw</text>
+  <rect x="108" y="324" width="286" height="36" rx="18" fill="#FFFFFF"/>
+  <text x="128" y="348" fill="#324058" font-size="18" font-family="Arial" font-weight="700">Ended: May 31, 5:00 PM</text>
+
+  <rect x="572" y="70" width="554" height="616" rx="28" fill="#FFFDF9" stroke="#DED8CE"/>
+  <text x="606" y="112" fill="#4C5768" font-size="16" font-family="Arial" font-weight="700">WINNER REVEAL</text>
+  <text x="606" y="170" fill="#172033" font-size="58" font-family="Arial" font-weight="700">Shane Englert</text>
+
+  <rect x="656" y="208" width="386" height="28" rx="14" fill="#F2C770"/>
+  <rect x="666" y="214" width="366" height="16" rx="8" fill="url(#lights)"/>
+  <rect x="656" y="238" width="386" height="324" rx="20" fill="#1A2740" stroke="#2F3D59" stroke-width="4"/>
+  <rect x="690" y="258" width="318" height="286" rx="14" fill="#111C2F"/>
+  <rect x="690" y="376" width="318" height="50" rx="10" fill="#223553"/>
+  <text x="785" y="409" fill="#EAF0FB" font-size="42" font-family="Arial" font-weight="700">ADAWWA</text>
+
+  <line x1="706" y1="286" x2="992" y2="286" stroke="#344866"/>
+  <line x1="706" y1="334" x2="992" y2="334" stroke="#344866"/>
+  <line x1="706" y1="468" x2="992" y2="468" stroke="#344866"/>
+  <line x1="706" y1="516" x2="992" y2="516" stroke="#344866"/>
+
+  <path d="M1032 390L1014 378V402L1032 390Z" fill="#F06A43"/>
+  <circle cx="780" cy="586" r="20" fill="#EFE7DB" stroke="#CFC5B7"/>
+  <circle cx="832" cy="586" r="20" fill="#EFE7DB" stroke="#CFC5B7"/>
+  <text x="766" y="592" fill="#324058" font-size="11" font-family="Arial" font-weight="700">START</text>
+  <text x="821" y="592" fill="#324058" font-size="11" font-family="Arial" font-weight="700">HOLD</text>
+
+  <rect x="606" y="612" width="470" height="56" rx="14" fill="#F2EBDE" stroke="#DDD3C5"/>
+  <text x="630" y="646" fill="#324058" font-size="24" font-family="Arial" font-weight="700">Official winner: adawwa</text>
+
+  <defs>
+    <linearGradient id="lights" x1="666" y1="222" x2="1032" y2="222" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFEA9A"/>
+      <stop offset="0.2" stop-color="#F7B962"/>
+      <stop offset="0.4" stop-color="#FFE7A0"/>
+      <stop offset="0.6" stop-color="#F7B962"/>
+      <stop offset="0.8" stop-color="#FFE7A0"/>
+      <stop offset="1" stop-color="#F7B962"/>
+    </linearGradient>
+  </defs>
+</svg>

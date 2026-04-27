@@ -15,6 +15,7 @@ import {
   makeRequestId,
   serverErrorResponse,
 } from "lib/apiUtils";
+import { enforceMutationOrigin } from "lib/requestSecurity";
 
 const SESSION_COOKIE = "prizepilot_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * Number(process.env.SESSION_TTL_DAYS || 14);
@@ -53,6 +54,13 @@ export async function GET(request) {
 export async function POST(request) {
   const requestId = makeRequestId();
   try {
+    const blockedOrigin = enforceMutationOrigin(request, requestId, {
+      message: "Authentication request blocked due to origin check.",
+    });
+    if (blockedOrigin) {
+      return blockedOrigin;
+    }
+
     const ip = getClientIp(request);
     const body = await request.json();
     const mode =
@@ -130,6 +138,13 @@ export async function POST(request) {
 export async function DELETE(request) {
   const requestId = makeRequestId();
   try {
+    const blockedOrigin = enforceMutationOrigin(request, requestId, {
+      message: "Sign out request blocked due to origin check.",
+    });
+    if (blockedOrigin) {
+      return blockedOrigin;
+    }
+
     const sessionCookie = request.cookies.get(SESSION_COOKIE)?.value;
     const state = await logoutOrganizer(sessionCookie);
     const response = jsonWithRequestId(state, requestId);
