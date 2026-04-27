@@ -18,8 +18,8 @@ export default function AuthPage() {
     confirmPassword: "",
     recoveryPassphrase: "",
     token: "",
-    organizerName: "Shane",
-    businessName: "Windy City Detail Co.",
+    organizerName: "Your Name",
+    businessName: "ex. Windy City Detail Co.",
     email: "",
   });
 
