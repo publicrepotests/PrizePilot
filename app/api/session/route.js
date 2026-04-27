@@ -4,6 +4,7 @@ import {
   logoutOrganizer,
   requestPasswordReset,
   registerOrganizer,
+  resetPasswordWithRecoveryPassphrase,
   resetPasswordWithToken,
   StoreError,
 } from "lib/prizePilotStore";
@@ -66,6 +67,7 @@ export async function POST(request) {
     const mode =
       body.mode === "register" ||
       body.mode === "reset_request" ||
+      body.mode === "reset_recovery" ||
       body.mode === "reset_confirm"
         ? body.mode
         : "login";
@@ -106,6 +108,11 @@ export async function POST(request) {
         payload.resetUrl = result.resetUrl;
       }
       return jsonWithRequestId(payload, requestId);
+    }
+
+    if (mode === "reset_recovery") {
+      const result = await resetPasswordWithRecoveryPassphrase(body);
+      return jsonWithRequestId(result, requestId);
     }
 
     if (mode === "reset_confirm") {

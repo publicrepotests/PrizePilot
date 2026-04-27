@@ -16,6 +16,7 @@ export default function AuthPage() {
     username: "",
     password: "",
     confirmPassword: "",
+    recoveryPassphrase: "",
     token: "",
     organizerName: "Shane",
     businessName: "Windy City Detail Co.",
@@ -58,15 +59,17 @@ export default function AuthPage() {
       }
 
       if (mode === "forgot") {
-        const result = await requestPasswordReset(form);
-        if (result?.resetUrl) {
-          setSuccessMessage(
-            `Reset link generated: ${result.resetUrl} (dev mode). In production this is emailed.`
-          );
-        } else {
-          setSuccessMessage(result.message || "If the account exists, a reset link was sent.");
+        if (form.password !== form.confirmPassword) {
+          throw new Error("Passwords do not match.");
         }
+        const result = await requestPasswordReset(form);
+        setSuccessMessage(result.message || "Password reset successful.");
         setMode("login");
+        setForm((current) => ({
+          ...current,
+          password: "",
+          confirmPassword: "",
+        }));
         return;
       }
 
@@ -116,6 +119,7 @@ export default function AuthPage() {
           </p>
           <ul className="hero__proof">
             <li>Username + password login</li>
+            <li>Recovery passphrase fallback reset</li>
             <li>Your own private campaign dashboard</li>
             <li>Per-account billing and exports</li>
           </ul>
@@ -128,10 +132,10 @@ export default function AuthPage() {
               {mode === "register"
                 ? "Create your organizer workspace."
                 : mode === "forgot"
-                  ? "Request password reset."
+                  ? "Recover your account with passphrase."
                   : mode === "reset_token"
                     ? "Set a new password."
-                  : "Sign in to your workspace."}
+                    : "Sign in to your workspace."}
             </h2>
 
             <div className="segmented-controls">
@@ -164,20 +168,6 @@ export default function AuthPage() {
                 required
               />
             </label>
-
-            {mode === "forgot" ? (
-              <label className="studio-field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  value={form.email}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, email: event.target.value }))
-                  }
-                  required
-                />
-              </label>
-            ) : null}
 
             {mode !== "forgot" ? (
               <label className="studio-field">
@@ -213,6 +203,56 @@ export default function AuthPage() {
                   minLength={10}
                 />
               </label>
+            ) : null}
+
+            {mode === "forgot" ? (
+              <>
+                <label className="studio-field">
+                  <span>Recovery passphrase</span>
+                  <input
+                    type="password"
+                    value={form.recoveryPassphrase}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        recoveryPassphrase: event.target.value,
+                      }))
+                    }
+                    required
+                    minLength={8}
+                  />
+                </label>
+                <label className="studio-field">
+                  <span>New password</span>
+                  <input
+                    type="password"
+                    value={form.password}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        password: event.target.value,
+                      }))
+                    }
+                    required
+                    minLength={10}
+                  />
+                </label>
+                <label className="studio-field">
+                  <span>Confirm new password</span>
+                  <input
+                    type="password"
+                    value={form.confirmPassword}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        confirmPassword: event.target.value,
+                      }))
+                    }
+                    required
+                    minLength={10}
+                  />
+                </label>
+              </>
             ) : null}
 
             {mode === "register" ? (
@@ -256,6 +296,22 @@ export default function AuthPage() {
                     required
                   />
                 </label>
+
+                <label className="studio-field">
+                  <span>Recovery passphrase</span>
+                  <input
+                    type="password"
+                    value={form.recoveryPassphrase}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        recoveryPassphrase: event.target.value,
+                      }))
+                    }
+                    required
+                    minLength={8}
+                  />
+                </label>
               </>
             ) : null}
 
@@ -268,7 +324,7 @@ export default function AuthPage() {
                 : mode === "register"
                   ? "Create account"
                   : mode === "forgot"
-                    ? "Send reset link"
+                    ? "Reset password"
                     : mode === "reset_token"
                       ? "Set new password"
                     : "Enter dashboard"}
