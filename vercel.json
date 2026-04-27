@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/jobs/settle-campaigns",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 3 * * *"
     }
   ]
 }
