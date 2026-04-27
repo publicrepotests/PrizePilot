@@ -124,6 +124,7 @@ export default function BillingPage() {
             <Link className="is-current" href="/billing">
               Billing
             </Link>
+            <Link href="/diagnostics">Diagnostics</Link>
             <Link href="/">Marketing site</Link>
           </nav>
         </aside>

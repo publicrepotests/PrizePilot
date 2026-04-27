@@ -23,6 +23,7 @@ POSTGRES_URL=
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+SENTRY_DSN=
 TURNSTILE_SECRET_KEY=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 PRIZEPILOT_CRON_SECRET=
@@ -61,6 +62,7 @@ That means you can keep local development simple and still deploy on a free clou
    - `POSTGRES_URL`
    - `NEXT_PUBLIC_APP_URL`
    - `STRIPE_SECRET_KEY`
+   - `SENTRY_DSN` (optional but recommended)
 5. Deploy
 
 Official Vercel references:
@@ -91,7 +93,7 @@ Current state includes:
 Before paid launch, still complete:
 
 1. Stripe webhook fulfillment and subscription lifecycle handling.
-2. Observability (error tracking, metrics, uptime alerts).
+2. Uptime alerts and on-call operational process.
 3. Legal/compliance review of rules templates and jurisdiction restrictions.
 4. Automated test coverage for auth/session/billing paths.
 

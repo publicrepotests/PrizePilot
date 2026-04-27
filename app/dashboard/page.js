@@ -246,6 +246,7 @@ export default function DashboardPage() {
             </Link>
             <Link href="/studio">Campaign studio</Link>
             <Link href="/billing">Billing</Link>
+            <Link href="/diagnostics">Diagnostics</Link>
             <Link href="/">Marketing site</Link>
           </nav>
           <div className="app-sidebar__tools">

@@ -36,6 +36,7 @@ git push -u origin main
    - `NEXT_PUBLIC_APP_URL` = your production URL (for example `https://prizepilot.app`)
    - `STRIPE_SECRET_KEY` = your Stripe secret key
    - `STRIPE_WEBHOOK_SECRET` = webhook signing secret from Stripe
+   - `SENTRY_DSN` = optional Sentry DSN for server error tracking
    - `PRIZEPILOT_FREE_TEST_MODE` = `false`
    - `TURNSTILE_SECRET_KEY` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` for public entry CAPTCHA
    - `CRON_SECRET` (or `PRIZEPILOT_CRON_SECRET`) for scheduled campaign settling endpoint auth
@@ -65,6 +66,7 @@ git push -u origin main
 6. Check `/api/health/ready` returns `ok: true` when required env is configured
 7. Confirm `backend` in `/api/health/ready` is `postgres` in production
 8. Confirm `checks.stripeMode` is `live` and `checks.freeTestModeDisabled` is `true`
+9. Open `/diagnostics` while signed in and verify readiness + settle action work.
 
 ## Scheduled auto-close job
 
@@ -99,6 +101,6 @@ Already included in this repo:
 Still required before accepting real customer payments:
 
 1. Add Stripe webhook handling for authoritative billing state.
-2. Add monitoring and error tracking.
+2. Verify Sentry intake and create alerts for critical API errors.
 3. Add automated tests and deployment health checks.
 4. Complete legal review of giveaway/contest rules by jurisdiction.

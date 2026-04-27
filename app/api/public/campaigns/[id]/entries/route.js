@@ -1,6 +1,7 @@
 import { StoreError, submitCampaignEntry } from "lib/prizePilotStore";
 import { jsonWithRequestId, makeRequestId, serverErrorResponse } from "lib/apiUtils";
 import { enforceRateLimit } from "lib/requestSecurity";
+import { checkRateLimit } from "lib/rateLimit";
 import { createHash } from "node:crypto";
 import { verifyEntryCaptcha } from "lib/captcha";
 
@@ -16,6 +17,18 @@ function resolveIpHash(request) {
     return "";
   }
   return createHash("sha256").update(ip).digest("hex");
+}
+
+function resolveUserAgentHash(request) {
+  const userAgent = String(request.headers.get("user-agent") || "").trim().toLowerCase();
+  if (!userAgent) {
+    return "";
+  }
+  return createHash("sha256").update(userAgent).digest("hex");
+}
+
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
 }
 
 export async function POST(request, { params }) {
@@ -43,6 +56,44 @@ export async function POST(request, { params }) {
     }
 
     const body = await request.json();
+    const normalizedEmail = normalizeEmail(body.email || "");
+    const emailHash = normalizedEmail
+      ? createHash("sha256").update(normalizedEmail).digest("hex")
+      : "";
+    const userAgentHash = resolveUserAgentHash(request);
+
+    if (emailHash) {
+      const emailRate = checkRateLimit(`entries:email:${resolved.id || "campaign"}:${emailHash}`, {
+        limit: 5,
+        windowMs: 15 * 60 * 1000,
+      });
+      if (!emailRate.allowed) {
+        const response = jsonWithRequestId(
+          { error: "Too many attempts from this email. Please wait and try again.", requestId },
+          requestId,
+          { status: 429 }
+        );
+        response.headers.set("retry-after", String(emailRate.retryAfterSec));
+        return response;
+      }
+    }
+
+    if (userAgentHash) {
+      const deviceRate = checkRateLimit(`entries:device:${resolved.id || "campaign"}:${userAgentHash}`, {
+        limit: 8,
+        windowMs: 15 * 60 * 1000,
+      });
+      if (!deviceRate.allowed) {
+        const response = jsonWithRequestId(
+          { error: "Too many attempts from this device. Please wait and try again.", requestId },
+          requestId,
+          { status: 429 }
+        );
+        response.headers.set("retry-after", String(deviceRate.retryAfterSec));
+        return response;
+      }
+    }
+
     const captcha = await verifyEntryCaptcha(body.captchaToken || "", resolveClientIp(request));
     if (!captcha.ok) {
       return jsonWithRequestId(
@@ -60,6 +111,7 @@ export async function POST(request, { params }) {
       projectLink: body.projectLink || "",
       submissionImageData: body.submissionImageData || "",
       ipHash: resolveIpHash(request),
+      userAgentHash,
     });
     return jsonWithRequestId(result, requestId);
   } catch (error) {
